@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+
+    background: #000;
+}
+
+
+/* =========================
+   MATRIX BACKGROUND
+========================= */
+
+#canvas {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 0;
+}
+
+
+/* =========================
+   FOREGROUND
+========================= */
+
+.foreground {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+
+    z-index: 1;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================
+   FROSTED GLASS BOX
+========================= */
+
+.login-box {
+    width: 380px;
+
+    padding: 45px 40px;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.login-box h1 {
+    margin-bottom: 30px;
+
+    color: white;
+
+    font-family: monospace;
+
+    font-size: 30px;
+
+    font-weight: 400;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.login-box input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    margin-bottom: 20px;
+
+    background: rgba(0, 0, 0, 0.25);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+.login-box input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.login-box input:focus {
+    border-color: rgba(250, 160, 160, 0.8);
+
+    box-shadow:
+        0 0 12px rgba(250, 160, 160, 0.2);
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.login-box button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: rgba(250, 160, 160, 0.85);
+
+    color: #1a0808;
+
+    font-family: monospace;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.login-box button:hover {
+    background: rgba(255, 190, 190, 0.95);
+
+    box-shadow:
+        0 0 20px rgba(250, 160, 160, 0.5);
+
+    transform: translateY(-2px);
+}
+
+/* =========================
+   GIF OVERLAY
+========================= */
+
+.gif-overlay {
+    position: fixed;
+    inset: 0;
+    
+    display: none; /* Controlled via JS */
+    justify-content: center;
+    align-items: center;
+    
+    background: rgba(0, 0, 0, 0.7); /* Dark dimmed background over the matrix */
+    
+    z-index: 9999; /* Higher than everything else */
+    pointer-events: auto; 
+}
+
+.overlay-content {
+    text-align: center;
+    color: #fff;
+    font-family: monospace; /* Matches your theme */
+}
+
+.gif-overlay img {
+    width: 300px;
+    height: auto;
+    border-radius: 20px; /* Round-edged GIF */
+    display: block;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+}
+
+.overlay-content p {
+    font-weight: bold; /* Bold text below gif */
+    font-size: 26px;
+    letter-spacing: 1px;
+    margin: 0;
+}

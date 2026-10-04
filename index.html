@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yee dekhoo</title>
+
+    <!-- fabicon -->
+     <link rel="icon" type="image/png" href="icons8-love-100.png">
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- =========================
+         MATRIX BACKGROUND
+    ========================== -->
+    <canvas id="canvas"></canvas>
+
+    <!-- =========================
+         FOREGROUND
+    ========================== -->
+    <div class="foreground">
+        <div class="login-box">
+            <h1>bolo ami ke?</h1>
+            <!-- Added id="userInput" -->
+            <input type="text" id="userInput" placeholder="bolo bolo joldi">
+            <!-- Added id="submitBtn" -->
+            <button id="submitBtn">let me check...</button>
+        </div>
+    </div>
+
+    <!-- =========================
+         GIF OVERLAY COMPONENTS
+    ========================== -->
+    <div class="gif-overlay" id="gifOverlay">
+        <div class="overlay-content">
+            <img id="statusGif" src="" alt="Status Animation">
+            <p id="statusMessage"></p>
+        </div>
+    </div>
+
+    <audio id="correctAudio" src="yeee.mp3" preload="auto"></audio>
+    <audio id="wrongAudio" src="horn.mp3" preload="auto"></audio>
+    <audio id="moynaAudio" src="hee.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+
+</html>

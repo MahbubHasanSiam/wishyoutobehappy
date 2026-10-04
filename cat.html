@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lazy Cat</title>
+
+    <style>
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: #f4f1ec;
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* =========================================
+           CAT CONTAINER
+        ========================================= */
+
+        #cat {
+            position: fixed;
+
+            width: 150px;
+            height: 130px;
+
+            left: 50%;
+            top: 50%;
+
+            transform-origin: center bottom;
+
+            cursor: grab;
+
+            user-select: none;
+            touch-action: none;
+
+            z-index: 9999;
+        }
+
+        #cat.dragging {
+            cursor: grabbing;
+        }
+
+
+        /* =========================================
+           SVG
+        ========================================= */
+
+        #cat svg {
+            width: 100%;
+            height: 100%;
+
+            overflow: visible;
+        }
+
+
+        /* =========================================
+           CAT BODY
+        ========================================= */
+
+        .body {
+            fill: #171717;
+            stroke: #090909;
+            stroke-width: 3;
+        }
+
+        .body-highlight {
+            fill: #202020;
+        }
+
+        .head {
+            fill: #191919;
+            stroke: #090909;
+            stroke-width: 3;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           EARS
+        ========================================= */
+
+        .ear {
+            fill: #191919;
+            stroke: #090909;
+            stroke-width: 3;
+        }
+
+        .ear-inner {
+            fill: #6c4b4b;
+        }
+
+
+        /* =========================================
+           EYES
+        ========================================= */
+
+        .eye {
+            fill: #dba85a;
+        }
+
+        .pupil {
+            fill: #111;
+        }
+
+        .eye-shine {
+            fill: white;
+        }
+
+        .eyelid {
+            fill: #191919;
+
+            transform-origin: center;
+            transform-box: fill-box;
+
+            animation: blink 5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            92%,
+            100% {
+                transform: scaleY(0);
+            }
+
+            94%,
+            97% {
+                transform: scaleY(1);
+            }
+        }
+
+
+        /* =========================================
+           NOSE + MOUTH
+        ========================================= */
+
+        .nose {
+            fill: #9c6262;
+        }
+
+        .mouth {
+            fill: none;
+            stroke: #090909;
+            stroke-width: 2;
+
+            stroke-linecap: round;
+        }
+
+
+        /* =========================================
+           WHISKERS
+        ========================================= */
+
+        .whisker {
+            stroke: #777;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+
+            opacity: 0.7;
+        }
+
+
+        /* =========================================
+           PAWS
+        ========================================= */
+
+        .paw {
+            fill: #191919;
+            stroke: #090909;
+            stroke-width: 2;
+        }
+
+
+        /* =========================================
+           TAIL
+        ========================================= */
+
+        #tail {
+            fill: none;
+
+            stroke: #151515;
+            stroke-width: 15;
+
+            stroke-linecap: round;
+            stroke-linejoin: round;
+
+            transform-origin: 115px 75px;
+
+            animation: tailLazy 2.8s ease-in-out infinite;
+        }
+
+        @keyframes tailLazy {
+
+            0% {
+                transform: rotate(-7deg);
+            }
+
+            50% {
+                transform: rotate(9deg);
+            }
+
+            100% {
+                transform: rotate(-7deg);
+            }
+        }
+
+
+        /* =========================================
+           LEGS
+        ========================================= */
+
+        .leg {
+            transform-origin: top center;
+            transform-box: fill-box;
+        }
+
+        .walking .front-left {
+            animation: legWalk 0.45s infinite alternate;
+        }
+
+        .walking .front-right {
+            animation: legWalk 0.45s infinite alternate-reverse;
+        }
+
+        .walking .back-left {
+            animation: legWalk 0.45s infinite alternate-reverse;
+        }
+
+        .walking .back-right {
+            animation: legWalk 0.45s infinite alternate;
+        }
+
+        @keyframes legWalk {
+
+            from {
+                transform: rotate(8deg) translateY(0);
+            }
+
+            to {
+                transform: rotate(-8deg) translateY(2px);
+            }
+        }
+
+
+        /* =========================================
+           BREATHING
+        ========================================= */
+
+        .breathing {
+            animation: breathe 3.5s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(1.025);
+            }
+        }
+
+
+        /* =========================================
+           SLEEPING
+        ========================================= */
+
+        #cat.sleeping {
+            animation: sleepyFloat 3s ease-in-out infinite;
+        }
+
+        #cat.sleeping .eye {
+            transform: scaleY(0.08);
+            transform-origin: center;
+        }
+
+        #cat.sleeping #tail {
+            animation-duration: 5s;
+            opacity: 0.7;
+        }
+
+        @keyframes sleepyFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(2px);
+            }
+        }
+
+
+        /* =========================================
+           PAT ANIMATION
+        ========================================= */
+
+        #cat.patted {
+            animation: patReaction 0.55s ease;
+        }
+
+        @keyframes patReaction {
+
+            0% {
+                transform: scale(1);
+            }
+
+            35% {
+                transform: scale(1.04) translateY(-3px);
+            }
+
+            65% {
+                transform: scale(0.98);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        /* =========================================
+           HEARTS
+        ========================================= */
+
+        .heart {
+            position: absolute;
+
+            font-size: 18px;
+
+            pointer-events: none;
+
+            animation: heartFloat 1s ease-out forwards;
+        }
+
+        @keyframes heartFloat {
+
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.6);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-35px) scale(1.2);
+            }
+        }
+
+
+        /* =========================================
+           SLEEP ZZZ
+        ========================================= */
+
+        .zzz {
+            position: absolute;
+
+            right: 5px;
+            top: 0;
+
+            color: #444;
+
+            font-weight: bold;
+
+            pointer-events: none;
+
+            opacity: 0;
+        }
+
+        #cat.sleeping .zzz {
+            animation: zzz 2.5s infinite;
+        }
+
+        @keyframes zzz {
+
+            0% {
+                opacity: 0;
+                transform: translate(0, 10px) scale(0.7);
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(20px, -25px) scale(1.1);
+            }
+        }
+
+
+        /* =========================================
+           LITTLE SHADOW
+        ========================================= */
+
+        .shadow {
+            fill: #000;
+            opacity: 0.12;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         CAT
+    ========================================= -->
+
+    <div id="cat">
+
+        <div class="zzz">Z</div>
+
+        <svg viewBox="0 0 150 130">
+
+            <!-- Ground shadow -->
+            <ellipse
+                class="shadow"
+                cx="72"
+                cy="117"
+                rx="52"
+                ry="7"
+            />
+
+
+            <!-- ===============================
+                 TAIL
+            ================================ -->
+
+            <path
+                id="tail"
+                d="M112 83
+                   C136 76,
+                     145 52,
+                     131 38
+                   C120 27,
+                     107 38,
+                     113 49"
+            />
+
+
+            <!-- ===============================
+                 BODY
+            ================================ -->
+
+            <g class="breathing">
+
+                <ellipse
+                    class="body"
+                    cx="76"
+                    cy="78"
+                    rx="43"
+                    ry="32"
+                />
+
+                <!-- body highlight -->
+                <ellipse
+                    class="body-highlight"
+                    cx="65"
+                    cy="76"
+                    rx="22"
+                    ry="18"
+                    opacity="0.5"
+                />
+
+
+                <!-- ===========================
+                     BACK LEGS
+                ============================ -->
+
+                <g class="leg back-left">
+                    <ellipse
+                        class="paw"
+                        cx="48"
+                        cy="101"
+                        rx="12"
+                        ry="10"
+                    />
+                </g>
+
+                <g class="leg back-right">
+                    <ellipse
+                        class="paw"
+                        cx="99"
+                        cy="101"
+                        rx="12"
+                        ry="10"
+                    />
+                </g>
+
+
+                <!-- ===========================
+                     FRONT LEGS
+                ============================ -->
+
+                <g class="leg front-left">
+                    <ellipse
+                        class="paw"
+                        cx="62"
+                        cy="101"
+                        rx="11"
+                        ry="10"
+                    />
+                </g>
+
+                <g class="leg front-right">
+                    <ellipse
+                        class="paw"
+                        cx="86"
+                        cy="101"
+                        rx="11"
+                        ry="10"
+                    />
+                </g>
+
+            </g>
+
+
+            <!-- ===============================
+                 HEAD
+            ================================ -->
+
+            <g id="headGroup">
+
+                <!-- left ear -->
+                <path
+                    class="ear"
+                    d="M30 42
+                       L34 12
+                       Q36 6 42 11
+                       L59 29
+                       Z"
+                />
+
+                <path
+                    class="ear-inner"
+                    d="M36 28
+                       L38 17
+                       L49 29
+                       Z"
+                />
+
+
+                <!-- right ear -->
+                <path
+                    class="ear"
+                    d="M91 29
+                       L108 10
+                       Q113 5 115 12
+                       L119 42
+                       Z"
+                />
+
+                <path
+                    class="ear-inner"
+                    d="M101 28
+                       L111 16
+                       L113 31
+                       Z"
+                />
+
+
+                <!-- HEAD -->
+                <ellipse
+                    id="catHead"
+                    class="head"
+                    cx="75"
+                    cy="45"
+                    rx="48"
+                    ry="39"
+                />
+
+
+                <!-- ===========================
+                     EYES
+                ============================ -->
+
+                <ellipse
+                    class="eye"
+                    cx="55"
+                    cy="45"
+                    rx="10"
+                    ry="13"
+                />
+
+                <ellipse
+                    class="eye"
+                    cx="95"
+                    cy="45"
+                    rx="10"
+                    ry="13"
+                />
+
+
+                <!-- pupils -->
+
+                <ellipse
+                    class="pupil"
+                    cx="56"
+                    cy="46"
+                    rx="5"
+                    ry="8"
+                />
+
+                <ellipse
+                    class="pupil"
+                    cx="96"
+                    cy="46"
+                    rx="5"
+                    ry="8"
+                />
+
+
+                <!-- eye shine -->
+
+                <circle
+                    class="eye-shine"
+                    cx="58"
+                    cy="42"
+                    r="2.5"
+                />
+
+                <circle
+                    class="eye-shine"
+                    cx="98"
+                    cy="42"
+                    r="2.5"
+                />
+
+
+                <!-- eyelids -->
+
+                <ellipse
+                    class="eyelid"
+                    cx="55"
+                    cy="45"
+                    rx="10"
+                    ry="13"
+                />
+
+                <ellipse
+                    class="eyelid"
+                    cx="95"
+                    cy="45"
+                    rx="10"
+                    ry="13"
+                />
+
+
+                <!-- ===========================
+                     NOSE
+                ============================ -->
+
+                <path
+                    class="nose"
+                    d="M72 57
+                       Q75 54 78 57
+                       Q75 61 72 57"
+                />
+
+
+                <!-- mouth -->
+
+                <path
+                    class="mouth"
+                    d="M75 60
+                       Q71 64 68 62
+
+                       M75 60
+                       Q79 64 82 62"
+                />
+
+
+                <!-- ===========================
+                     WHISKERS
+                ============================ -->
+
+                <line
+                    class="whisker"
+                    x1="35"
+                    y1="56"
+                    x2="10"
+                    y2="52"
+                />
+
+                <line
+                    class="whisker"
+                    x1="35"
+                    y1="61"
+                    x2="9"
+                    y2="63"
+                />
+
+                <line
+                    class="whisker"
+                    x1="115"
+                    y1="56"
+                    x2="140"
+                    y2="52"
+                />
+
+                <line
+                    class="whisker"
+                    x1="115"
+                    y1="61"
+                    x2="141"
+                    y2="63"
+                />
+
+            </g>
+
+        </svg>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================
+           ELEMENTS
+        ========================================= */
+
+        const cat = document.getElementById("cat");
+        const catHead = document.getElementById("catHead");
+
+
+        /* =========================================
+           CAT POSITION
+        ========================================= */
+
+        let x = window.innerWidth / 2 - 75;
+        let y = window.innerHeight / 2 - 65;
+
+        let targetX = x;
+        let targetY = y;
+
+        let direction = 1;
+
+
+        /* =========================================
+           CAT STATES
+        ========================================= */
+
+        const STATE = {
+
+            IDLE: "idle",
+            WALKING: "walking",
+            SLEEPING: "sleeping",
+            PATTED: "patted",
+            DRAGGING: "dragging"
+
+        };
+
+        let state = STATE.IDLE;
+
+
+        /* =========================================
+           APPLY POSITION
+        ========================================= */
+
+        function updatePosition() {
+
+            cat.style.left = `${x}px`;
+            cat.style.top = `${y}px`;
+
+        }
+
+
+        updatePosition();
+
+
+        /* =========================================
+           RANDOM NUMBER
+        ========================================= */
+
+        function random(min, max) {
+
+            return Math.random() * (max - min) + min;
+
+        }
+
+
+        /* =========================================
+           CHOOSE RANDOM DESTINATION
+        ========================================= */
+
+        function chooseDestination() {
+
+            const margin = 20;
+
+            targetX = random(
+                margin,
+                window.innerWidth - 150 - margin
+            );
+
+            targetY = random(
+                window.innerHeight * 0.45,
+                window.innerHeight - 145
+            );
+
+
+            if (targetX > x) {
+
+                direction = 1;
+
+            } else {
+
+                direction = -1;
+
+            }
+
+
+            cat.style.transform =
+                `scaleX(${direction})`;
+
+        }
+
+
+        /* =========================================
+           WALK
+        ========================================= */
+
+        function walk() {
+
+            if (state !== STATE.WALKING) {
+                return;
+            }
+
+
+            const dx = targetX - x;
+            const dy = targetY - y;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+
+            if (distance < 3) {
+
+                x = targetX;
+                y = targetY;
+
+                stopWalking();
+
+                return;
+
+            }
+
+
+            const speed = 0.45;
+
+            x += (dx / distance) * speed;
+            y += (dy / distance) * speed;
+
+
+            updatePosition();
+
+        }
+
+
+        /* =========================================
+           START WALKING
+        ========================================= */
+
+        function startWalking() {
+
+            if (state === STATE.DRAGGING) {
+                return;
+            }
+
+
+            state = STATE.WALKING;
+
+            cat.classList.remove("sleeping");
+
+            cat.classList.add("walking");
+
+
+            chooseDestination();
+
+        }
+
+
+        /* =========================================
+           STOP WALKING
+        ========================================= */
+
+        function stopWalking() {
+
+            if (state !== STATE.WALKING) {
+                return;
+            }
+
+
+            state = STATE.IDLE;
+
+            cat.classList.remove("walking");
+
+
+            /*
+                Lazy cats don't immediately
+                decide what to do next.
+            */
+
+            setTimeout(
+                decideNextAction,
+                random(1000, 4000)
+            );
+
+        }
+
+
+        /* =========================================
+           SLEEP
+        ========================================= */
+
+        function sleep() {
+
+            if (
+                state === STATE.DRAGGING ||
+                state === STATE.SLEEPING
+            ) {
+                return;
+            }
+
+
+            state = STATE.SLEEPING;
+
+            cat.classList.remove("walking");
+
+            cat.classList.add("sleeping");
+
+
+            /*
+                Sleep for 4–9 seconds.
+            */
+
+            setTimeout(() => {
+
+                if (state !== STATE.SLEEPING) {
+                    return;
+                }
+
+
+                wakeUp();
+
+            }, random(4000, 9000));
+
+        }
+
+
+        /* =========================================
+           WAKE UP
+        ========================================= */
+
+        function wakeUp() {
+
+            cat.classList.remove("sleeping");
+
+            state = STATE.IDLE;
+
+
+            /*
+                Give the cat a lazy pause
+                before walking again.
+            */
+
+            setTimeout(
+                decideNextAction,
+                random(1000, 3000)
+            );
+
+        }
+
+
+        /* =========================================
+           AUTONOMOUS BEHAVIOR
+        ========================================= */
+
+        function decideNextAction() {
+
+            if (state !== STATE.IDLE) {
+                return;
+            }
+
+
+            const choice = Math.random();
+
+
+            /*
+                45% chance:
+                Stay lazy.
+            */
+
+            if (choice < 0.45) {
+
+                setTimeout(
+                    decideNextAction,
+                    random(1000, 4000)
+                );
+
+                return;
+            }
+
+
+            /*
+                35% chance:
+                Walk somewhere.
+            */
+
+            if (choice < 0.80) {
+
+                startWalking();
+
+                return;
+            }
+
+
+            /*
+                20% chance:
+                Go to sleep.
+            */
+
+            sleep();
+
+        }
+
+
+        /* =========================================
+           PAT THE CAT
+        ========================================= */
+
+        function patCat() {
+
+            if (state === STATE.DRAGGING) {
+                return;
+            }
+
+
+            /*
+                Wake the cat if sleeping.
+            */
+
+            if (state === STATE.SLEEPING) {
+
+                wakeUp();
+
+            }
+
+
+            state = STATE.PATTED;
+
+
+            cat.classList.add("patted");
+
+
+            createHeart();
+
+
+            setTimeout(() => {
+
+                cat.classList.remove("patted");
+
+                state = STATE.IDLE;
+
+
+                setTimeout(
+                    decideNextAction,
+                    random(1500, 3500)
+                );
+
+            }, 600);
+
+        }
+
+
+        /* =========================================
+           HEART
+        ========================================= */
+
+        function createHeart() {
+
+            const heart =
+                document.createElement("div");
+
+
+            heart.className = "heart";
+
+            heart.innerHTML = "♥";
+
+
+            heart.style.left =
+                `${x + random(55, 90)}px`;
+
+            heart.style.top =
+                `${y + 10}px`;
+
+
+            document.body.appendChild(heart);
+
+
+            setTimeout(() => {
+
+                heart.remove();
+
+            }, 1000);
+
+        }
+
+
+        /* =========================================
+           DRAGGING
+        ========================================= */
+
+        let dragging = false;
+
+        let moved = false;
+
+        let startPointerX = 0;
+        let startPointerY = 0;
+
+        let offsetX = 0;
+        let offsetY = 0;
+
+
+        cat.addEventListener(
+            "pointerdown",
+            function(event) {
+
+                event.preventDefault();
+
+
+                dragging = true;
+
+                moved = false;
+
+
+                startPointerX = event.clientX;
+                startPointerY = event.clientY;
+
+
+                const rect =
+                    cat.getBoundingClientRect();
+
+
+                offsetX =
+                    event.clientX - rect.left;
+
+                offsetY =
+                    event.clientY - rect.top;
+
+
+                state = STATE.DRAGGING;
+
+                cat.classList.add("dragging");
+
+                cat.setPointerCapture(event.pointerId);
+
+            }
+        );
+
+
+        cat.addEventListener(
+            "pointermove",
+            function(event) {
+
+                if (!dragging) {
+                    return;
+                }
+
+
+                const dx =
+                    event.clientX - startPointerX;
+
+                const dy =
+                    event.clientY - startPointerY;
+
+
+                if (
+                    Math.abs(dx) > 4 ||
+                    Math.abs(dy) > 4
+                ) {
+
+                    moved = true;
+
+                }
+
+
+                x =
+                    event.clientX - offsetX;
+
+                y =
+                    event.clientY - offsetY;
+
+
+                /*
+                    Keep the cat inside
+                    the viewport.
+                */
+
+                x = Math.max(
+                    0,
+                    Math.min(
+                        window.innerWidth - 150,
+                        x
+                    )
+                );
+
+
+                y = Math.max(
+                    0,
+                    Math.min(
+                        window.innerHeight - 130,
+                        y
+                    )
+                );
+
+
+                updatePosition();
+
+            }
+        );
+
+
+        cat.addEventListener(
+            "pointerup",
+            function(event) {
+
+                if (!dragging) {
+                    return;
+                }
+
+
+                dragging = false;
+
+                cat.classList.remove("dragging");
+
+
+                /*
+                    If the user didn't move the cat,
+                    treat it as a click.
+                */
+
+                if (!moved) {
+
+                    const rect =
+                        catHead.getBoundingClientRect();
+
+
+                    const insideHead =
+                        event.clientX >= rect.left &&
+                        event.clientX <= rect.right &&
+                        event.clientY >= rect.top &&
+                        event.clientY <= rect.bottom;
+
+
+                    if (insideHead) {
+
+                        patCat();
+
+                        return;
+
+                    }
+
+                }
+
+
+                state = STATE.IDLE;
+
+
+                setTimeout(
+                    decideNextAction,
+                    random(1000, 3000)
+                );
+
+            }
+        );
+
+
+        /* =========================================
+           WINDOW RESIZE
+        ========================================= */
+
+        window.addEventListener(
+            "resize",
+            function() {
+
+                x = Math.min(
+                    x,
+                    window.innerWidth - 150
+                );
+
+                y = Math.min(
+                    y,
+                    window.innerHeight - 130
+                );
+
+
+                updatePosition();
+
+            }
+        );
+
+
+        /* =========================================
+           MAIN ANIMATION LOOP
+        ========================================= */
+
+        function animationLoop() {
+
+            walk();
+
+            requestAnimationFrame(
+                animationLoop
+            );
+
+        }
+
+
+        animationLoop();
+
+
+        /* =========================================
+           START CAT
+        ========================================= */
+
+        setTimeout(
+            decideNextAction,
+            2000
+        );
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>interrogation</title>
+  <link rel="icon" type="image/png" href="icons8-love-100.png">
+  <link rel="stylesheet" href="style-inter.css">
+</head>
+<body>
+  <canvas id="canvas" aria-hidden="true"></canvas>
+
+  <main class="foreground">
+    <section class="interaction-area" id="interactionArea" aria-label="Date invitation">
+      <div class="invitation-box">
+        <h1>asho date e jai, jaba?</h1>
+        <div class="button-row">
+          <button class="answer-button yes-button" id="yesButton" type="button">YES</button>
+          <span class="button-placeholder" aria-hidden="true"></span>
+        </div>
+      </div>
+      <button class="answer-button no-button" id="noButton" type="button">NO</button>
+    </section>
+  </main>
+
+  <div class="gif-overlay" id="gifOverlay" aria-hidden="true">
+    <img src="shadi.gif" alt="Celebration animation">
+  </div>
+  <section class="story-screen dance-screen" id="danceScreen" aria-hidden="true">
+    <div class="dance-gifs" id="danceGifs" aria-hidden="true"></div>
+    <div class="dance-content">
+      <img class="main-celebration-gif" src="khanadana.gif" alt="Khanadana celebration">
+      <p>Ekhon amra jamai bou, ha ha ha</p>
+    </div>
+  </section>
+  <section class="story-screen birthday-screen" id="birthdayScreen" aria-hidden="true">
+    <div class="birthday-collage" id="birthdayCollage" aria-hidden="true"></div>
+    <div class="birthday-message">
+      <h1>Happy Birthday Tanju</h1>
+      <p>Love you moyna</p>
+    </div>
+  </section>
+  <audio id="shadiAudio" src="shadi.mp3" preload="auto"></audio>
+  <audio id="cryAudio" src="cry.mp3" preload="auto"></audio>
+  <audio id="laughAudio" src="ha ha ha.mp3" preload="auto"></audio>
+  <audio id="umaruCryAudio" src="umaru cry.mp3" preload="auto"></audio>
+  <audio id="dangAudio" src="dang.mp3" preload="auto"></audio>
+  <audio id="closingAudio" src="closing.mp3" preload="auto"></audio>
+  <script src="script-inter.js"></script>
+</body>
+</html>

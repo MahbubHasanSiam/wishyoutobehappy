@@ -1,0 +1,283 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(43, 21, 35, 0.45), transparent 65%),
+    #08070b;
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.foreground {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.interaction-area {
+  position: relative;
+  display: flex;
+  width: min(570px, calc(100vw - 24px));
+  height: min(406.5px, calc(100vh - 24px));
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitation-box {
+  width: min(380px, calc(100vw - 40px));
+  height: 271px;
+  padding: 45px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
+  text-align: center;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.invitation-box h1 {
+  margin-bottom: 30px;
+  color: #fff;
+  font-family: monospace;
+  font-size: 25px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.answer-button {
+  min-width: 100px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 20px;
+  color: #1a0808;
+  font-family: monospace;
+  font-size: 15px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s;
+}
+
+.yes-button,
+.no-button {
+  background: rgba(250, 160, 160, 0.85);
+}
+
+.yes-button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 190, 190, 0.95);
+  box-shadow: 0 0 20px rgba(250, 160, 160, 0.5);
+}
+
+.button-placeholder {
+  width: 100px;
+  height: 45px;
+  flex: 0 0 100px;
+}
+
+.no-button {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  transition:
+    left 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: left, top;
+}
+
+.gif-overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.gif-overlay.is-visible {
+  display: flex;
+}
+
+.gif-overlay img {
+  display: block;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  height: auto;
+  object-fit: contain;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+}
+
+.story-screen {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.story-screen.is-active {
+  display: flex;
+}
+
+.dance-screen {
+  background: #000;
+  color: #fff;
+  font-family: monospace;
+}
+
+.dance-gifs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dance-tile {
+  position: absolute;
+  width: min(22vw, 250px);
+  height: min(25vh, 210px);
+  object-fit: contain;
+}
+
+.dance-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  max-width: calc(100vw - 32px);
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: #000;
+}
+
+.main-celebration-gif {
+  display: block;
+  width: min(440px, calc(70vw - 40px));
+  max-height: 52vh;
+  object-fit: contain;
+}
+
+.dance-content p {
+  font-size: clamp(18px, 3vw, 30px);
+  font-weight: 700;
+}
+
+.birthday-screen {
+  background: #000;
+  color: #fff;
+  font-family: monospace;
+}
+
+.birthday-collage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.birthday-tile {
+  position: absolute;
+  width: min(38vw, 460px);
+  height: min(42vh, 340px);
+  object-fit: contain;
+  opacity: 0;
+  border-radius: 24px;
+  clip-path: inset(0 round 24px);
+  transition: opacity 2000ms ease;
+  filter: brightness(0.82);
+  overflow: hidden;
+}
+
+.birthday-tile.is-visible {
+  opacity: 1;
+}
+
+.birthday-message {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+  text-shadow: 0 3px 18px #000, 0 0 32px rgba(0, 0, 0, 0.95);
+}
+
+.birthday-message h1 {
+  font-size: clamp(34px, 7vw, 76px);
+  margin-bottom: 16px;
+}
+
+.birthday-message p {
+  font-size: clamp(26px, 5vw, 54px);
+}
+
+@media (max-width: 600px) {
+  .dance-tile {
+    width: min(30vw, 160px);
+    height: min(22vh, 150px);
+  }
+
+  .birthday-tile {
+    width: min(48vw, 280px);
+    height: min(34vh, 240px);
+    border-radius: 18px;
+    clip-path: inset(0 round 18px);
+  }
+}
+
+@media (max-width: 420px) {
+  .invitation-box {
+    padding: 38px 24px;
+  }
+
+  .invitation-box h1 {
+    font-size: clamp(18px, 5.8vw, 23px);
+    letter-spacing: 0;
+  }
+
+  .answer-button {
+    min-width: 88px;
+  }
+
+  .button-placeholder {
+    width: 88px;
+    flex-basis: 88px;
+  }
+}
